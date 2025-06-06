@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+        }
+        .board {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .column {
+            background: #e3e3e3;
+            padding: 10px;
+            border-radius: 5px;
+            width: 30%;
+            min-height: 300px;
+        }
+        .column h2 {
+            text-align: center;
+        }
+        .task {
+            background: #fff;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: move;
+        }
+        .add-task {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .add-task input {
+            padding: 5px;
+            width: 70%;
+        }
+        .add-task button {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Kanban Board</h1>
+    <div class="add-task">
+        <input type="text" id="newTask" placeholder="New task">
+        <button onclick="addTask()">Add</button>
+    </div>
+    <div class="board">
+        <div class="column" id="todo" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <h2>To Do</h2>
+            <div class="task" draggable="true" ondragstart="drag(event)">Sample Task</div>
+        </div>
+        <div class="column" id="inprogress" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <h2>In Progress</h2>
+        </div>
+        <div class="column" id="done" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <h2>Done</h2>
+        </div>
+    </div>
+
+    <script>
+        let dragItem = null;
+        function drag(ev) {
+            dragItem = ev.target;
+        }
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+        function drop(ev) {
+            ev.preventDefault();
+            if (dragItem) {
+                ev.currentTarget.appendChild(dragItem);
+                dragItem = null;
+            }
+        }
+        function addTask() {
+            const input = document.getElementById('newTask');
+            const text = input.value.trim();
+            if (!text) return;
+            const task = document.createElement('div');
+            task.className = 'task';
+            task.textContent = text;
+            task.setAttribute('draggable', 'true');
+            task.ondragstart = drag;
+            document.getElementById('todo').appendChild(task);
+            input.value = '';
+        }
+    </script>
+</body>
+</html>
